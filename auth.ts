@@ -21,15 +21,15 @@ export const {
 // 		// verifyRequest: '/auth/verify-request', // (used for check email message)
 // 		// newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
 //   },
-//   events: {
-//     async linkAccount({ user }) {
-// 	console.log(1, user);
-//       await db.user.update({
-//         where: { id: user.id },
-//         data: { emailVerified: new Date() }
-//       })
-//     }
-//   },
+  events: {
+    async linkAccount({ user }) {
+	console.log(1, user);
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() }
+      })
+    }
+  },
   	callbacks: {
 		// Этот callback 
 		async signIn({ user, account }) {
