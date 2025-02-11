@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { ConfigProvider } from 'antd';
+import '@ant-design/v5-patch-for-react-19';
+
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 
@@ -32,7 +36,41 @@ export default async function RootLayout({
 			<body
 			className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-			{children}
+				<AntdRegistry >
+					<ConfigProvider
+						theme={{
+						token: {
+							colorPrimary: '#63b03e',
+							borderRadius: 2,
+							colorTextBase: '#242424',
+							fontFamily: 'inherit',
+							fontWeightStrong: 600,
+							fontSize: 16,
+							// lineWidth: 600,
+							colorBorder: '#8b8b8b',
+							colorTextPlaceholder: '#afafaf',
+							colorLink: '#63b03e',
+							colorFillTertiary: '#a3a2a2', // Цвет слайдера
+						},
+						components: {
+							Divider: {
+							orientationMargin: 0,
+							textPaddingInline: 1,
+							},
+							Slider: {
+							railBg: '#8b8b8b',
+							trackHoverBg: '#63b03e',
+							trackBg: '#63b03e',
+							},
+							Checkbox: {
+								fontSize: 14,
+							}
+						},
+						}}
+					>
+						{children}
+					</ConfigProvider>
+				</AntdRegistry>
 			</body>
 		</html>
     </SessionProvider>
