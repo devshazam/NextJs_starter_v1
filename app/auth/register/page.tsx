@@ -2,13 +2,20 @@
 import { Button, Checkbox, Form, Input ,Flex} from "antd";
 import { LockOutlined, UserOutlined , PhoneOutlined, MailOutlined} from '@ant-design/icons';
 import { useActionState } from 'react';
-import { userRegister } from '@/actions/authActions';
+import { register } from '@/actions/register';
+
+// import { useForm } from "react-hook-form";
+
+// import { FormItem } from "react-hook-form-antd";
+// import { DevTool } from "@hookform/devtools";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import * as z from "zod";
 
 const initialState = {
 	success: "",
 	response: "",
 	errors: {
-		username: "",
+		// username: "",
 		email: "",
 		phone: "",
 		password: "",
@@ -18,7 +25,7 @@ const initialState = {
 
 
 const RegisterPage = () => {
-	const [currentState, actionFunction, isPending] = useActionState(userRegister, initialState);
+	const [currentState, actionFunction, isPending] = useActionState(register, initialState);
 
 	console.log(currentState);
 	const onFinish = (values: any) => {
@@ -28,74 +35,54 @@ const RegisterPage = () => {
   return ( 
     <>
 	<h1 className="text-center mb-6 text-lg">Регистрация Kopi34.ru</h1>
-      <Form
+      {/* <Form
 	 action={actionFunction}
       name="login"
       initialValues={{ remember: true }}
-     //  style={{ maxWidth: 360 }}
-
+	 //  style={{ maxWidth: 360 }}
+	 
       onFinish={onFinish}
-    >
-      <Form.Item
-        name="username"
-        rules={[{ required: true, message: 'Это поле обязательно!' },{max: 20, message: 'До 20 символов!' }]}
-	   hasFeedback
-      >
-        <Input prefix={<UserOutlined />} placeholder="Имя пользователя" />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        rules={[{ type: 'email', message: 'Только для E-mail!', },{ required: true, message: 'Это поле обязательно!' }]}
-	   hasFeedback
-      >
-        <Input prefix={<MailOutlined />} placeholder="Email" />
-      </Form.Item>
-	
-	 <Form.Item
-        name="phone"
-	   hasFeedback
-      >
-        <Input prefix={<PhoneOutlined />} placeholder="Телефон (не обязательно)" />
-      </Form.Item>
+	 > */}
 
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: 'Это поле обязательно!'},{max: 20, message: 'До 20 символов!' }]}
-	   hasFeedback
-      >
-        <Input.Password prefix={<LockOutlined />} type="password" placeholder="Пароль" />
-      </Form.Item>
-      <Form.Item
-        name="confirm"
-        dependencies={['password']}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: 'Введите пароль!',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('Пароли не совпадают!'));
-            },
-          }),
-        ]}
-      >
-        <Input.Password  prefix={<LockOutlined />} placeholder="Подтвердите пароль" />
-      </Form.Item>
+    <form 
+		action={actionFunction} >
 
+	 <div className="flex flex-col gap-4">
+		<div >
+			<Input prefix={<MailOutlined />} placeholder="Email"  name="email"/>
 
-      <Form.Item>
-        <Button block type="primary" htmlType="submit">
+			{currentState?.errors?.email && ( <p className="authentication__error-message">{currentState.errors.email}</p> )}
+		</div>
+		{/* <div >
+			<Input prefix={<UserOutlined />} placeholder="Имя пользователя" name="username"/>
+			{currentState?.errors?.username && ( <p className="authentication__error-message">{currentState.errors.username}</p> )}
+
+		</div> */}
+		<div>
+			<Input prefix={<PhoneOutlined />} placeholder="Телефон (не обязательно)" name="phone"/>
+			{currentState?.errors?.phone && ( <p className="authentication__error-message">{currentState.errors.phone}</p> )}
+		</div>
+		<div>
+			<Input.Password prefix={<LockOutlined />} type="password" placeholder="Пароль" name="password"/>
+			{currentState?.errors?.password && ( <p className="authentication__error-message">{currentState.errors.password}</p> )}
+		</div>
+		<div>
+			<Input.Password  prefix={<LockOutlined />} placeholder="Подтвердите пароль"  name="confirm"/>
+
+			{currentState?.errors?.confirm && ( <p className="authentication__error-message">{currentState.errors.confirm}</p> )}
+		</div>
+		<div >
+        <Button block type="primary" htmlType="submit" disabled={isPending} loading={isPending}>
           Зарегистрироваться*
         </Button>
-      </Form.Item>
-
-    </Form>
-    <p className="text-xs w-full text-center">* Регистрируясь, вы принимаете <a href="">политику конфиденциальности</a></p>
+      </div>
+</div>
+    {/* </Form> */}
+    </form>
+    {currentState?.success && <p className="text-green-600">{currentState.success}</p>}
+	{currentState?.response && <p className="text-yellow-600">{currentState.response}</p>}
+				
+    <p className="text-xs w-full text-center mt-2">* Регистрируясь, вы принимаете <a href="https://kopi34.ru/oferta" className="text-blue-500">политику конфиденциальности</a></p>
     </>
   );
 }
