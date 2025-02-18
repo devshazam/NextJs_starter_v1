@@ -1,14 +1,13 @@
-import { signOut } from "@/auth"
+'use client'
+import { logout } from "@/actions/logout";
  
 export function SignOut() {
+	const onClick = () => {
+		logout();
+	   };
   return (
-    <form
-      action={async () => {
-        "use server"
-        await signOut()
-      }}
-    >
-      <button type="submit">Sign Out</button>
-    </form>
+
+      <button onClick={onClick}>Sign Out</button>
+
   )
 }

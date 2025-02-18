@@ -11,13 +11,14 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 
+
 // Получить юзера или создать
 export async function login(prevState: any, formData: FormData) {
-
+	console.log(123, prevState, formData)
 	const apiResult =  { success: "", response: "", errors: { email: "", password: ""} };
 
 
-	try{
+	// try{
 		// Валидация ZOD
 		const contactFormData = Object.fromEntries(formData);
 		
@@ -32,6 +33,7 @@ export async function login(prevState: any, formData: FormData) {
 		// Получение API keys
 		const email = formData.get("email") as string;
 		const password = formData.get("password") as string;
+		const callbackUrl = formData.get("callbackUrl") as string;
 		// Проверка email на существование
 		
 		// return { ...apiResult, success: "Confirmation email sent!" }; 
@@ -39,7 +41,7 @@ export async function login(prevState: any, formData: FormData) {
 		const existingUser = await getUserByEmail(email);
 
 		if (!existingUser || !existingUser.email || !existingUser.password) {
-		  return { error: "Email does not exist!" }
+		  return { ...apiResult, response: "Такой пользователь не существует!" }
 		}
 	   
 		if (!existingUser.emailVerified) {
@@ -52,7 +54,7 @@ export async function login(prevState: any, formData: FormData) {
 		    verificationToken.token,
 		  );
 	   
-		  return { success: "Confirmation email sent!" };
+		  return {...apiResult,  response: "Вы не верифицировали Email. Мы отправили повторное письмо!" };
 		}
 	   
 	   
@@ -61,18 +63,19 @@ export async function login(prevState: any, formData: FormData) {
 		  await signIn("credentials", {
 		    email,
 		    password,
-		    redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+			// куда перейти после успешной аутентификации     
+		    redirectTo: callbackUrl,
 		  })
 		} catch (error) {
 		  if (error instanceof AuthError) {
 		    switch (error.type) {
 			 case "CredentialsSignin":
-			   return { error: "Invalid credentials!" }
+				return {...apiResult, response: "Не правильные пароль!" }
 			 default:
-			   return { error: "Something went wrong!" }
+			   return {...apiResult,  response: "Не предвиденная ошибка, обратитесь к администратору!" }
 		    }
 		  }
 	   
 		  throw error;
 		}
-	   };
+};

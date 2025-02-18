@@ -22,34 +22,14 @@ export default {
     }),
     Yandex,
 //     TikTok,
-//     YandexProvider({
-// 	clientId: process.env.YANDEX_CLIENT_ID,
-// 	clientSecret: process.env.YANDEX_CLIENT_SECRET
-//    }),
-// Vk({
-// 	accessTokenUrl: `https://oauth.vk.com/access_token?v=${apiVersion}`,
-// 	requestTokenUrl: `https://oauth.vk.com/access_token?v=${apiVersion}`,
-// 	authorizationUrl: `https://oauth.vk.com/authorize?response_type=code&v=${apiVersion}`,
-// 	profileUrl: `https://api.vk.com/method/users.get?fields=photo_100&v=${apiVersion}`,
-//    }),
-	// Vk,
-   Vk({
-	clientId: process.env.AUTH_VK_ID,
-	clientSecret: process.env.AUTH_VK_SECRET,
-	// checks: ["pkce", "state"],
-	checks: ["none"],
-   }),
-//    MailRu,
-//     Github({
-//       clientId: process.env.GITHUB_CLIENT_ID,
-//       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-//     }),
+
+
     Credentials({
 	// credentials используется для настройки формы входа - которая автоматически генерируется
-	credentials: {
-          email: { label: "Email", type: "email" },
-          password: { label: "Password", type: "password" },
-        },
+	// credentials: {
+     //      email: { label: "Email", type: "email" },
+     //      password: { label: "Password", type: "password" },
+     //    },
 	// authorize используется для проверки входных данных - если они совпадают, то вернет объект user, а если нет, то null. Можно также выбросить ошибку и увидеть ее на странице с ошибками.
       async authorize(credentials) {
         const validatedFields = LoginSchema.safeParse(credentials);

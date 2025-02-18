@@ -53,17 +53,20 @@ export const LoginSchema = z.object({
   .max(25, "Пароль не должен быть более 25 символов!"),
 });
 
-
-
-export const confirmSchema = z.object({
-  password: z.string().min(6, {
-    message: "Minimum of 6 characters required",
-  }),
-});
+export const NewPasswordSchema = z.object({
+	password: z
+	.string()
+	.trim()
+	.min(6, { message: "Пароль должен быть не менее 6 символов" })
+	.max(25, "Пароль не должен быть более 25 символов!"),
+	token: z.string().min(1, {
+		message: "Защитный токен отсутствует!",
+	   }),
+   });
 
 export const ResetSchema = z.object({
   email: z.string().email({
-    message: "Email is required",
+    message: "Email обязателен!",
   }),
 });
 
